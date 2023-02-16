@@ -20,4 +20,5 @@ public interface UserRepository {
     public User findById(int id);
 
     public User findByUsernameAndPassword(LoginReqDto loginReqDto);
+
 }

@@ -48,15 +48,6 @@ public class UserController {
         return "redirect:/";
     }
 
-    /**
-     * POST요청과 PUT요청시에만 BODY 데이터가 있다.
-     * 해당 BODY데이터는 컨트롤러 메서드의 매개변수에 주입된다.(DS)
-     * 스프링은 x-www-form-urlencoded가 기본 파싱전략
-     * key=value&key=value (form태그의 기본 전송 전략)
-     * 컨트롤러의 메서드는 매개변수에서 두가지 방식으로 데이터를 받는다.
-     * 1. 그냥 변수, 2. DTO(Object)
-     * 주의 : key이름과 변수이름이 동일해야 한다.
-     */
     @PostMapping("/join")
     public String join(JoinReqDto joinReqDto) { // DTO로 받는 것이 좋다.
         // 1. POST, PUT일 때만 유효성 검사 (이것보다 우선되는 것이 인증 검사이다)
