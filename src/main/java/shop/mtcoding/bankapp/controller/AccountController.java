@@ -2,28 +2,28 @@ package shop.mtcoding.bankapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class AccountController {
 
-    @GetMapping("/depositForm")
-    public String depositForm() {
-        return "account/depositForm";
-    }
-
-    @GetMapping("/saveForm")
+    @GetMapping("/account/saveForm")
     public String saveForm() {
         return "account/saveForm";
     }
 
-    @GetMapping("/transferForm")
-    public String transferForm() {
-        return "account/transferForm";
-    }
-
-    @GetMapping("/withdrawForm")
+    @GetMapping("/account/withdrawForm")
     public String withdrawForm() {
         return "account/withdrawForm";
     }
 
+    @GetMapping("/account/depositForm")
+    public String depositForm() {
+        return "account/depositForm";
+    }
+
+    @GetMapping("/account/transferForm")
+    public String transferForm() {
+        return "account/transferForm";
+    }
 }

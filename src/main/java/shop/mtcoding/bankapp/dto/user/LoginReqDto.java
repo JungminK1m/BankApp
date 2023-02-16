@@ -1,5 +1,11 @@
 package shop.mtcoding.bankapp.dto.user;
 
-public class LoginReqDto {
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+public class LoginReqDto {
+    private String username;
+    private String password;
 }
