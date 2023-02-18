@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface AccountRepository {
-    public int insert(Account user);
+    public int insert(Account account);
 
-    public int updateById(Account user);
+    public int updateById(Account account);
 
     public int deleteById(int id);
 
