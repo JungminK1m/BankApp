@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.bankapp.dto.user.JoinReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
-import shop.mtcoding.bankapp.model.user.User;
 import shop.mtcoding.bankapp.model.user.UserRepository;
 
 @Service // IoC 공부하면 됨!

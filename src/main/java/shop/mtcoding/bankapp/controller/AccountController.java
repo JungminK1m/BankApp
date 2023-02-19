@@ -1,15 +1,21 @@
 package shop.mtcoding.bankapp.controller;
 
+import java.security.Principal;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
+import shop.mtcoding.bankapp.model.account.Account;
+import shop.mtcoding.bankapp.model.account.AccountRepository;
 import shop.mtcoding.bankapp.model.user.User;
 import shop.mtcoding.bankapp.service.AccountService;
 
@@ -17,15 +23,21 @@ import shop.mtcoding.bankapp.service.AccountService;
 public class AccountController {
 
     @Autowired
-    HttpSession session;
+    private HttpSession session;
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @PostMapping("/account")
     public String save(AccountSaveReqDto accountSaveReqDto) {
         // 1. 인증검사
         User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("로그인을 먼저 해 주세요.", HttpStatus.BAD_REQUEST);
+        }
 
         // 2. 유효성 검사
         if (accountSaveReqDto.getNumber() == null || accountSaveReqDto.getNumber().isEmpty()) {
@@ -42,7 +54,15 @@ public class AccountController {
     }
 
     @GetMapping({ "/", "/account" })
-    public String main() {
+    public String main(Model model) { // model에 값을 추가하면 request에 저장된다
+        // 1. 인증검사
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            throw new CustomException("로그인을 먼저 해 주세요.", HttpStatus.BAD_REQUEST);
+        }
+        List<Account> accountList = accountRepository.findByUserId(principal.getId());
+        model.addAttribute("accountList", accountList);
+
         return "account/main";
     }
 

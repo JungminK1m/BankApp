@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import shop.mtcoding.bankapp.dto.user.JoinReqDto;
 import shop.mtcoding.bankapp.dto.user.LoginReqDto;
+import shop.mtcoding.bankapp.model.account.Account;
 
 @Mapper
 public interface UserRepository {
