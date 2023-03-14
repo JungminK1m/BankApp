@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
+import shop.mtcoding.bankapp.dto.accouont.AccountWithdrawReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
 import shop.mtcoding.bankapp.model.account.AccountRepository;
@@ -30,6 +31,32 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @PostMapping("/account/withdraw")
+    public String withdraw(AccountWithdrawReqDto accountWithdrawReqDto) {
+        // 1. 인증체크? 필요없음 왜냐!! ATM기로 할거니까
+
+        // 2. 유효성 검사? 해야함 왜?! POST니까
+        // 유효성 검사는 3개 해야함. DTO가 3개니까!
+        if (accountWithdrawReqDto.getAmount() == null) {
+            throw new CustomException("Amount를 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        if (accountWithdrawReqDto.getAmount().longValue() <= 0) {
+            throw new CustomException("출금액이 0원 이하일 수 없습니다", HttpStatus.BAD_REQUEST);
+        }
+
+        if (accountWithdrawReqDto.getWAccountNumber() == null || accountWithdrawReqDto.getWAccountNumber().isEmpty()) {
+            throw new CustomException("WAccountNumber(출금계좌번호) 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        if (accountWithdrawReqDto.getWAccountPassword() == null
+                || accountWithdrawReqDto.getWAccountPassword().isEmpty()) {
+            throw new CustomException("WAccountPassword(출금계좌 비밀번호) 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+
+        int accountId = accountService.계좌출금(accountWithdrawReqDto);
+
+        return "redirect:/account/" + accountId;
+    }
 
     @PostMapping("/account")
     public String save(AccountSaveReqDto accountSaveReqDto) {

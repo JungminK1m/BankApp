@@ -30,4 +30,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from account_tb where user_id = #{principalId}
     </select>
 
+    <select id="findByNumber" resultType="shop.mtcoding.bankapp.model.account.Account">
+        select * from account_tb where number = #{number}
+    </select>
+
 </mapper>
