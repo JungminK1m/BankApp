@@ -5,7 +5,7 @@
 
    <h1>이체</h1>
     <hr />
-    <form action="/account/transfer" method="post">
+    <form action="c" method="post">
         <input type="text" name="amount" placeholder="Enter 이체금액" /><br />
         <input type="text" name="wAccountNumber" placeholder="Enter 출금계좌" /><br />
         <input type="text" name="dAccountNumber" placeholder="Enter 입금계좌" /><br />

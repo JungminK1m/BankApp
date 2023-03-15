@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.bankapp.dto.accouont.AccountDepositReqDtp;
 import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
+import shop.mtcoding.bankapp.dto.accouont.AccountTransferReqDto;
 import shop.mtcoding.bankapp.dto.accouont.AccountWithdrawReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
@@ -90,6 +91,47 @@ public class AccountService {
         ; // 입금계좌의 잔액
         historyRepository.insert(history);
 
+    }
+
+    public int 이체하기(AccountTransferReqDto accountTransferReqDto, Integer id) {
+
+        // 1. 계좌 존재 여부
+        // 1-1. 출금 계좌 존재 여부
+        Account accountPS = accountRepository.findByNumber(accountTransferReqDto.getWAccountNumber());
+        if (accountPS == null) {
+            throw new CustomException("계좌가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
+        }
+
+        // 1-2. 입금 계좌 존재 여부
+        Account accountPS = accountRepository.findByNumber(accountTransferReqDto.getDAccountNumber());
+        if (accountPS == null) {
+            throw new CustomException("계좌가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
+        }
+
+        // 2. 계좌 패스워드 확인 (accountPS와 입력 받은 패스워드를 비교)
+        accountPS.CheckPassword(accountTransferReqDto.getWAccountPassword());
+
+        // 3. 잔액확인
+        accountPS.CheckBalance(accountTransferReqDto.getAmount());
+
+        // 4. 출금(balance를 - 하는 것)
+        accountPS.Withdraw(accountTransferReqDto.getAmount());
+        accountRepository.updateById(accountPS);
+
+        // 5. 히스토리 남기기 (거래내역) - insert 할 거임
+        // history 객체를 만들어야 함
+        // 어디에 있는 정보들로 넣어줄까? => 위에 있는 정보로!
+        History history = new History(); // PS 안붙이는 이유 : DB에서 조회한 것이 아니라 내가 만든 것
+        history.setAmount(accountTransferReqDto.getAmount()); // 얼마가 들아왔는지
+        history.setWAccountId(accountPS.getId()); // 출금계좌 ID
+        history.setDAccountId(null); // 입금계좌 ID
+        history.setWBalance(accountPS.getBalance()); // 출금계좌의 잔액
+        history.setDBalance(null); // 입금계좌의 잔액
+        ; // 입금계좌의 잔액
+        historyRepository.insert(history);
+
+        // 6. 해당 계좌의 id를 return - 디테일 화면으로 돌아가야 하니까 => id니까 리턴 타입이 int
+        return accountPS.getId();
     }
 
 }
