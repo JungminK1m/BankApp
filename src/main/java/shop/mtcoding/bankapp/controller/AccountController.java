@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import shop.mtcoding.bankapp.dto.accouont.AccountDepositReqDtp;
 import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
 import shop.mtcoding.bankapp.dto.accouont.AccountWithdrawReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
@@ -31,6 +32,26 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @PostMapping("/account/deposit")
+    public String deposit(AccountDepositReqDtp accountDepositReqDtp) {
+        // 1. 인증체크? 필요없음 왜냐!! ATM기로 할거니까
+        // 2. 유효성 검사? 해야함 왜?! POST니까
+        // 유효성 검사는 2개 해야함. DTO가 2개니까!
+        if (accountDepositReqDtp.getAmount() == null) {
+            throw new CustomException("Amount를 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+        if (accountDepositReqDtp.getAmount().longValue() <= 0) {
+            throw new CustomException("입금액이 0원 이하일 수 없습니다", HttpStatus.BAD_REQUEST);
+        }
+        if (accountDepositReqDtp.getDAccountNumber() == null || accountDepositReqDtp.getDAccountNumber().isEmpty()) {
+            throw new CustomException("DAccountNumber(입금계좌번호) 입력해주세요", HttpStatus.BAD_REQUEST);
+        }
+
+        accountService.입금하기(accountDepositReqDtp);
+
+        return "redirect:/";
+    }
 
     @PostMapping("/account/withdraw")
     public String withdraw(AccountWithdrawReqDto accountWithdrawReqDto) {
@@ -85,7 +106,7 @@ public class AccountController {
         // 1. 인증검사
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
-            throw new CustomException("로그인을 먼저 해 주세요.", HttpStatus.BAD_REQUEST);
+            return "redirect:/loginForm";
         }
         List<Account> accountList = accountRepository.findByUserId(principal.getId());
         model.addAttribute("accountList", accountList);
