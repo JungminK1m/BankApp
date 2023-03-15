@@ -22,8 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <update id="updateById">
-        update account_tb set number= #{number}, password= #{password}, balance= #
-        {balance}, user_id= #{userId} where id = #{id}
+        update account_tb set number= #{number}, password= #{password}, balance= #{balance}, user_id= #{userId} where id = #{id}
     </update>
 
     <select id="findByUserId" resultType="shop.mtcoding.bankapp.model.account.Account">

@@ -53,7 +53,7 @@ public class AccountService {
         history.setAmount(accountWithdrawReqDto.getAmount()); // 얼마가 들아왔는지
         history.setWAccountId(accountPS.getId()); // 출금계좌 ID
         history.setDAccountId(null); // 입금계좌 ID
-        history.setWBlanace(accountPS.getBalance()); // 출금계좌의 잔액
+        history.setWBalance(accountPS.getBalance()); // 출금계좌의 잔액
         history.setDBalance(null); // 입금계좌의 잔액
         ; // 입금계좌의 잔액
         historyRepository.insert(history);
