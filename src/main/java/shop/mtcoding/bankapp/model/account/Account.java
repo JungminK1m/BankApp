@@ -30,6 +30,12 @@ public class Account {
         }
     }
 
+    public void CheckOwner(Integer principalId) {
+        if (this.userId != principalId) {
+            throw new CustomException("출금계좌의 소유주가 아닙니다.", HttpStatus.FORBIDDEN);
+        }
+    }
+
     public void Withdraw(long amount) {
         this.balance = this.balance - amount;
     }
@@ -37,4 +43,5 @@ public class Account {
     public void Deposit(long amount) {
         this.balance = this.balance + amount;
     }
+
 }
