@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import shop.mtcoding.bankapp.dto.accouont.AccountDepositReqDtp;
-import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
-import shop.mtcoding.bankapp.dto.accouont.AccountTransferReqDto;
-import shop.mtcoding.bankapp.dto.accouont.AccountWithdrawReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountDepositReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountSaveReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountTransferReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountWithdrawReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
 import shop.mtcoding.bankapp.model.account.AccountRepository;
@@ -65,7 +65,7 @@ public class AccountService {
     }
 
     @Transactional
-    public void 입금하기(AccountDepositReqDtp accountDepositReqDtp) {
+    public void 입금하기(AccountDepositReqDto accountDepositReqDtp) {
         // 1. 입금 계좌 존재여부
         Account accountPS = accountRepository.findByNumber(accountDepositReqDtp.getDAccountNumber());
         if (accountPS == null) {

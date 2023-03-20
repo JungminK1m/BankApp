@@ -13,12 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import shop.mtcoding.bankapp.dto.accouont.AccountDepositReqDtp;
-import shop.mtcoding.bankapp.dto.accouont.AccountDetailRespDto;
-import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
-import shop.mtcoding.bankapp.dto.accouont.AccountTransferReqDto;
-import shop.mtcoding.bankapp.dto.accouont.AccountWithdrawReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountDepositReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountDetailRespDto;
+import shop.mtcoding.bankapp.dto.account.AccountSaveReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountTransferReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountWithdrawReqDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
 import shop.mtcoding.bankapp.model.account.AccountRepository;
@@ -77,7 +78,7 @@ public class AccountController {
     }
 
     @PostMapping("/account/deposit")
-    public String deposit(AccountDepositReqDtp accountDepositReqDtp) {
+    public String deposit(AccountDepositReqDto accountDepositReqDtp) {
         // 1. 인증체크? 필요없음 왜냐!! ATM기로 할거니까
         // 2. 유효성 검사? 해야함 왜?! POST니까
         // 유효성 검사는 2개 해야함. DTO가 2개니까!
@@ -157,15 +158,20 @@ public class AccountController {
         return "account/main";
     }
 
+    // 계좌 상세보기
     @GetMapping("/account/{id}")
-    public String detail(@PathVariable int id, Model model) {
+    public String detail(@PathVariable int id, @RequestParam(name = "gubun", defaultValue = "all") String gubun,
+            Model model) {
         User principal = (User) session.getAttribute("principal");
         // 1. 인증체크
         if (principal == null) {
             return "redirect:/loginForm";
         }
 
-        // 2.
+        // 2. 레파지토리 호출
+        // 메서드를 3개 쓰거나 OR MyBatis 동적 쿼리
+
+        // 계좌 상세 정보
         AccountDetailRespDto aDto = accountRepository.findByIdWithUser(id);
         model.addAttribute("aDto", aDto);
 
