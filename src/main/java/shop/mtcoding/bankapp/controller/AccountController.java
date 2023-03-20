@@ -173,7 +173,9 @@ public class AccountController {
 
         // 계좌 상세 정보
         AccountDetailRespDto aDto = accountRepository.findByIdWithUser(id);
-        model.addAttribute("aDto", aDto);
+        if (aDto.getUserId() != principal.getId()) {
+            throw new CustomException("해당 계좌를 볼 수 있는 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
 
         return "account/detail";
     }
