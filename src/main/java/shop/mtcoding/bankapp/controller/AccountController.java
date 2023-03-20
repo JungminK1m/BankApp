@@ -1,5 +1,6 @@
 package shop.mtcoding.bankapp.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.security.Principal;
 import java.util.List;
 
@@ -10,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import shop.mtcoding.bankapp.dto.accouont.AccountDepositReqDtp;
+import shop.mtcoding.bankapp.dto.accouont.AccountDetailRespDto;
 import shop.mtcoding.bankapp.dto.accouont.AccountSaveReqDto;
 import shop.mtcoding.bankapp.dto.accouont.AccountTransferReqDto;
 import shop.mtcoding.bankapp.dto.accouont.AccountWithdrawReqDto;
@@ -35,7 +38,7 @@ public class AccountController {
     private AccountRepository accountRepository;
 
     @PostMapping("/account/transfer")
-    public String transfer(AccountTransferReqDto accountTransferReqDto) {
+    public String transfer(AccountTransferReqDto accountTransferReqDto, Model model) {
         // 1. 인증 필요
         User principal = (User) session.getAttribute("principal");
         if (principal == null) {
@@ -155,7 +158,17 @@ public class AccountController {
     }
 
     @GetMapping("/account/{id}")
-    public String detail() {
+    public String detail(@PathVariable int id, Model model) {
+        User principal = (User) session.getAttribute("principal");
+        // 1. 인증체크
+        if (principal == null) {
+            return "redirect:/loginForm";
+        }
+
+        // 2.
+        AccountDetailRespDto aDto = accountRepository.findByIdWithUser(id);
+        model.addAttribute("aDto", aDto);
+
         return "account/detail";
     }
 

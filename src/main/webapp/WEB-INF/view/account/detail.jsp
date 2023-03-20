@@ -6,9 +6,9 @@
   <h1>계좌상세보기</h1>
     <hr />
     <div class="user-box">
-        fullname님 계좌<br />
-        계좌번호 : 1111<br />
-        잔액 : 1000원
+        ${aDto.fullname}님의 계좌<br />
+        계좌번호 : ${aDto.number}<br />
+        잔액 : ${aDto.balance}원
     </div>
     <div class="list-box">
         <a href="#">전체</a> <a href="#">입금</a> <a href="#">출금</a>
