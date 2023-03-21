@@ -20,9 +20,11 @@ import shop.mtcoding.bankapp.dto.account.AccountDetailRespDto;
 import shop.mtcoding.bankapp.dto.account.AccountSaveReqDto;
 import shop.mtcoding.bankapp.dto.account.AccountTransferReqDto;
 import shop.mtcoding.bankapp.dto.account.AccountWithdrawReqDto;
+import shop.mtcoding.bankapp.dto.history.HistoryRespDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
 import shop.mtcoding.bankapp.model.account.AccountRepository;
+import shop.mtcoding.bankapp.model.history.HistoryRepository;
 import shop.mtcoding.bankapp.model.user.User;
 import shop.mtcoding.bankapp.service.AccountService;
 
@@ -37,6 +39,9 @@ public class AccountController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private HistoryRepository historyRepository;
 
     @PostMapping("/account/transfer")
     public String transfer(AccountTransferReqDto accountTransferReqDto, Model model) {
@@ -176,6 +181,13 @@ public class AccountController {
         if (aDto.getUserId() != principal.getId()) {
             throw new CustomException("해당 계좌를 볼 수 있는 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
+
+        // 입출금 내역
+        List<HistoryRespDto> historyDto = historyRepository.findByGubun(gubun, id);
+
+        // jsp에 뿌리기 위해 model에 담자!
+        model.addAttribute("aDto", aDto);
+        model.addAttribute("historyDto", historyDto);
 
         return "account/detail";
     }
