@@ -183,11 +183,11 @@ public class AccountController {
         }
 
         // 입출금 내역
-        List<HistoryRespDto> historyDto = historyRepository.findByGubun(gubun, id);
+        List<HistoryRespDto> historyDtoList = historyRepository.findByGubun(gubun, id);
 
         // jsp에 뿌리기 위해 model에 담자!
         model.addAttribute("aDto", aDto);
-        model.addAttribute("historyDto", historyDto);
+        model.addAttribute("historyDtoList", historyDtoList);
 
         return "account/detail";
     }

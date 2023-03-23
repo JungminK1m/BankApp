@@ -11,7 +11,9 @@
         잔액 : ${aDto.balance}원
     </div>
     <div class="list-box">
-        <a href="#">전체</a> <a href="#">입금</a> <a href="#">출금</a>
+        <a href="/account/${aDto.id}?gubun=all">전체</a>
+        <a href="/account/${aDto.id}?gubun=deposit">입금</a>
+        <a href="/account/${aDto.id}?gubun=withdraw">출금</a>
         <br />
         <table border="1">
             <thead>
@@ -24,13 +26,15 @@
                 </tr>
             </thead>
             <tbody>
+                <c:forEach items="${historyDtoList}" var="historyDto">
                 <tr>
-                    <td>2022.10.01</td>
-                    <td>ATM</td>
-                    <td>1111계좌</td>
-                    <td>500원</td>
-                    <td>1500원</td>
+                    <td>${historyDto.createdAt}</td>
+                    <td>${historyDto.sender}</td>
+                    <td>${historyDto.receiver}</td>
+                    <td>${historyDto.amount}원</td>
+                    <td>${historyDto.balance}원</td>
                 </tr>
+                    </c:forEach>
             </tbody>
         </table>
     </div>
