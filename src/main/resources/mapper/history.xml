@@ -23,22 +23,21 @@
         </if>
 
         <if test="gubun == 'all'">
-            SELECT 
-            ht.id, 
-            ht.amount, 
-            nvl(wat.number, 'ATM') sender, 
+            SELECT
+            ht.id,
+            ht.amount,
+            case when ht.w_account_id =  #{accountId} then ht.w_balance
+            when ht.d_account_id =  #{accountId} then ht.d_balance
+            end as balance,
+            nvl(wat.number, 'ATM') sender,
             nvl(dat.number, 'ATM') receiver,
-            case when ht.w_balance is null then ht.d_balance  
-                when ht.d_balance is null then ht.w_balance  
-                else ht.w_balance 
-                end as balance,
             ht.created_at
             FROM history_tb ht
             LEFT OUTER JOIN account_tb wat
             ON ht.w_account_id = wat.id
             LEFT OUTER JOIN account_tb dat
             ON ht.d_account_id = dat.id
-            WHERE ht.w_account_id = #{accountId} or ht.d_account_id = #{accountId};
+            WHERE ht.w_account_id =  #{accountId} or ht.d_account_id =  #{accountId}
         </if>
     </select>
 
